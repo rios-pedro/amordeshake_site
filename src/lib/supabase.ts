@@ -28,12 +28,12 @@ function normalizeCategory(value: unknown): MenuCategory {
 export async function fetchMenuItems(includeInactive = false): Promise<MenuItem[]> {
   if (!supabase) return []
   let query = supabase
-    .from('products')
-    .select('id,name,description,price,category,image_url,is_active')
-    .in('category', ['Shakes', 'Lanches', 'Refeições', 'Bebidas'])
+    .from('menu_items')
+    .select('id,name,description,price,category,image_url,is_available,sort_order')
     .order('category')
+    .order('sort_order')
     .order('name')
-  if (!includeInactive) query = query.eq('is_active', true)
+  if (!includeInactive) query = query.eq('is_available', true)
   const { data, error } = await query
   if (error) throw error
   return (data ?? []).map((item, index) => ({
@@ -42,8 +42,8 @@ export async function fetchMenuItems(includeInactive = false): Promise<MenuItem[
     price: Number(item.price),
     description: item.description ?? '',
     image_url: item.image_url ?? '',
-    is_available: item.is_active,
-    sort_order: index,
+    is_available: item.is_available,
+    sort_order: item.sort_order ?? index,
   })) as MenuItem[]
 }
 
@@ -59,13 +59,14 @@ export async function signOutAdmin() {
 
 export async function createMenuItem(item: Omit<MenuItem, 'id'> | MenuItem) {
   if (!supabase) throw new Error('Supabase não configurado')
-  const { error } = await supabase.from('products').insert({
+  const { error } = await supabase.from('menu_items').insert({
     name: item.name,
     description: item.description,
     price: item.price,
-    category: categoryLabel(item.category),
+    category: item.category,
     image_url: item.image_url,
-    is_active: item.is_available,
+    is_available: item.is_available,
+    sort_order: item.sort_order,
   })
   if (error) throw error
 }
@@ -73,14 +74,15 @@ export async function createMenuItem(item: Omit<MenuItem, 'id'> | MenuItem) {
 export async function updateMenuItem(item: MenuItem) {
   if (!supabase) throw new Error('Supabase não configurado')
   const { error } = await supabase
-    .from('products')
+    .from('menu_items')
     .update({
       name: item.name,
       description: item.description,
       price: item.price,
-      category: categoryLabel(item.category),
+      category: item.category,
       image_url: item.image_url,
-      is_active: item.is_available,
+      is_available: item.is_available,
+      sort_order: item.sort_order,
     })
     .eq('id', item.id)
   if (error) throw error
@@ -88,15 +90,6 @@ export async function updateMenuItem(item: MenuItem) {
 
 export async function deleteMenuItem(id: string) {
   if (!supabase) throw new Error('Supabase não configurado')
-  const { error } = await supabase.from('products').delete().eq('id', id)
+  const { error } = await supabase.from('menu_items').delete().eq('id', id)
   if (error) throw error
-}
-
-function categoryLabel(category: MenuCategory) {
-  return {
-    shakes: 'Shakes',
-    lanches: 'Lanches',
-    refeicoes: 'Refeições',
-    bebidas: 'Bebidas',
-  }[category]
 }

@@ -14,9 +14,9 @@ Preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` no `.env.local` para ati
 
 ## Supabase
 
-O frontend usa a tabela existente `products` com os campos `name`, `description`, `price`, `category`, `image_url` e `is_active`. A aplicação filtra somente as categorias `Shakes`, `Lanches`, `Refeições` e `Bebidas`; categorias auxiliares como `Adicionais`, `Kits` e `Sabores` não aparecem nas abas do cardápio.
+O frontend usa a tabela `menu_items` com os campos `name`, `description`, `price`, `category`, `image_url`, `is_available` e `sort_order`. As categorias persistidas são `shakes`, `lanches`, `refeicoes` e `bebidas`.
 
-O frontend adapta `is_active` para o estado interno de disponibilidade e trata descrições e imagens nulas como valores vazios.
+O frontend trata descrições e imagens nulas como valores vazios. Para produção, configure `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` como variáveis de ambiente do build.
 
 Crie um usuário em **Authentication > Users** para acessar `/admin`. A autenticação usa `signInWithPassword`; qualquer usuário autenticado pode administrar o cardápio nesta versão inicial.
 

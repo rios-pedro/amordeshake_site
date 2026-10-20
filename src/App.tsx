@@ -26,7 +26,7 @@ import type { MenuCategory, MenuItem } from './lib/types'
 import './App.css'
 
 const WHATSAPP_NUMBER = '61981969929'
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Quero conhecer o cardápio do Amor de Shake 🌿')}`
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Quero conhecer o cardápio do Amor de Shake!')}`
 const CURRENT_YEAR = new Date().getFullYear()
 
 const categories: { id: MenuCategory; label: string }[] = [
@@ -100,11 +100,12 @@ function LandingPage() {
   const [menu, setMenu] = useState<MenuItem[]>(fallbackMenu)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [menuError, setMenuError] = useState(false)
 
   useEffect(() => {
     fetchMenuItems()
       .then((items) => items.length && setMenu(items))
-      .catch(() => undefined)
+      .catch(() => setMenuError(true))
       .finally(() => setLoading(false))
   }, [])
 
@@ -174,7 +175,7 @@ function LandingPage() {
           <div className="mt-12 flex gap-2 overflow-x-auto border-b border-[#e9eee9] pb-px">
             {categories.map((category) => <button key={category.id} onClick={() => setActiveCategory(category.id)} className={`whitespace-nowrap px-5 pb-4 text-sm font-bold transition ${activeCategory === category.id ? 'border-b-2 border-[#d1a400] text-[#20352d]' : 'text-[#9aa59e] hover:text-[#52625a]'}`}>{category.label}</button>)}
           </div>
-          {loading ? <div className="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map((item) => <div key={item} className="h-72 animate-pulse rounded-3xl bg-[#f2f5f0]" />)}</div> : visibleItems.length ? <div className="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => <MenuCard item={item} key={item.id} />)}</div> : <p className="py-16 text-center text-[#829087]">Novidades chegando em breve nesta categoria.</p>}
+          {loading ? <div className="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-4">{[1, 2, 3, 4].map((item) => <div key={item} className="h-72 animate-pulse rounded-3xl bg-[#f2f5f0]" />)}</div> : visibleItems.length ? <div className="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => <MenuCard item={item} key={item.id} />)}</div> : <div className="py-16 text-center text-[#829087]"><p>Novidades chegando em breve nesta categoria.</p>{menuError && <p className="mt-2 text-xs text-red-500">Não foi possível carregar o cardápio atualizado.</p>}</div>}
         </div>
       </section>
 
