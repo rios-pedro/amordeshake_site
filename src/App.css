@@ -1,0 +1,4 @@
+.hero-blob { opacity: .95; }
+.hero-photo { box-shadow: 0 30px 80px rgba(73, 62, 10, .16); }
+.admin-input { display: block; width: 100%; margin-top: .5rem; border: 1px solid #e1e8df; border-radius: .85rem; padding: .75rem .9rem; font: inherit; font-weight: 500; outline: none; transition: border-color .2s, box-shadow .2s; }
+.admin-input:focus { border-color: #d1a400; box-shadow: 0 0 0 3px rgba(248, 212, 78, .25); }
