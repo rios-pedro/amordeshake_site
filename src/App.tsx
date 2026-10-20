@@ -26,7 +26,7 @@ import type { MenuCategory, MenuItem } from './lib/types'
 import './App.css'
 
 const WHATSAPP_NUMBER = '61981969929'
-const WHATSAPP_URL = `https://wa.me/${}?text=${encodeURIComponent('Olá! Quero conhecer o cardápio do Amor de Shake 🌿')}`
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Quero conhecer o cardápio do Amor de Shake 🌿')}`
 const CURRENT_YEAR = new Date().getFullYear()
 
 const categories: { id: MenuCategory; label: string }[] = [
