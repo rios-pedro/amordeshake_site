@@ -14,7 +14,9 @@ Preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` no `.env.local` para ati
 
 ## Supabase
 
-Execute `supabase/migrations/20261019000000_create_menu_items.sql` no SQL Editor do Supabase. A migration cria a tabela `menu_items`, categorias, dados iniciais, índices, trigger de atualização e políticas RLS.
+O frontend usa a tabela existente `products` com os campos `name`, `description`, `price`, `category`, `image_url` e `is_active`. A aplicação filtra somente as categorias `Shakes`, `Lanches`, `Refeições` e `Bebidas`; categorias auxiliares como `Adicionais`, `Kits` e `Sabores` não aparecem nas abas do cardápio.
+
+O frontend adapta `is_active` para o estado interno de disponibilidade e trata descrições e imagens nulas como valores vazios.
 
 Crie um usuário em **Authentication > Users** para acessar `/admin`. A autenticação usa `signInWithPassword`; qualquer usuário autenticado pode administrar o cardápio nesta versão inicial.
 
